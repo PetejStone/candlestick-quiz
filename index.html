@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Candlestick Pattern Quiz</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        padding: 20px;
+      }
+      .quiz-container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .quiz-item {
+        margin-bottom: 40px;
+      }
+      .quiz-item img {
+        width: 100%;
+        max-height: 300px;
+        object-fit: contain;
+        margin-bottom: 15px;
+      }
+      .options button {
+        display: block;
+        margin: 5px 0;
+        padding: 10px;
+        width: 100%;
+        background: #e0e0e0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      .options button:hover {
+        background: #d5d5d5;
+      }
+      .explanation {
+        display: none;
+        margin-top: 15px;
+        background: #e8f5e9;
+        border-left: 5px solid #4caf50;
+        padding: 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quiz-container" id="quiz"></div>
+
+    <script>
+      const quizData = [
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/Aw9AgUX8QKil-BUdnw7ScQ.png",
+          correct: "Engulfing Bar",
+          options: ["Doji", "Hammer", "Engulfing Bar", "Shooting Star"],
+          explanation:
+            "The Engulfing Bar pattern indicates a strong reversal signal where the second candle completely engulfs the previous one. Bullish engulfing appears after a downtrend; bearish after an uptrend.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/rfXpIkN6RSegXlV7BWD-Xg.png",
+          correct: "Doji",
+          options: ["Doji", "Harami", "Morning Star", "Gravestone Doji"],
+          explanation:
+            "Doji indicates market indecision. It forms when open and close prices are nearly equal.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/iIhdfuXkSemI-o5IadOQtg.png",
+          correct: "Dragonfly Doji",
+          options: [
+            "Gravestone Doji",
+            "Dragonfly Doji",
+            "Hammer",
+            "Shooting Star",
+          ],
+          explanation:
+            "Dragonfly Doji suggests a potential bullish reversal. The long lower shadow shows buying pressure.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/YCx3ExlETYKBEpNwtMQn_w.png",
+          correct: "Gravestone Doji",
+          options: [
+            "Gravestone Doji",
+            "Dragonfly Doji",
+            "Shooting Star",
+            "Doji",
+          ],
+          explanation:
+            "Gravestone Doji indicates a potential bearish reversal with a long upper shadow.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/ZBdxQ9LpSn6VDIug1LX2ow.png",
+          correct: "Morning Star",
+          options: ["Evening Star", "Morning Star", "Harami", "Hammer"],
+          explanation:
+            "The Morning Star is a bullish reversal pattern composed of three candles signaling the end of a downtrend.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/faPsXvCdSIO_Q3RV8Yi0Iw.png",
+          correct: "Evening Star",
+          options: ["Evening Star", "Morning Star", "Harami", "Shooting Star"],
+          explanation:
+            "The Evening Star is a bearish reversal pattern signaling the end of an uptrend.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/021lZChhQSq8L5prFDbjMQ.png",
+          correct: "Hammer",
+          options: ["Shooting Star", "Doji", "Hammer", "Harami"],
+          explanation:
+            "The Hammer is a bullish reversal pattern seen after a downtrend, with a small body and long lower shadow.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/2XfxxZfRRk6E3S2rJT6thA.png",
+          correct: "Shooting Star",
+          options: ["Shooting Star", "Hammer", "Gravestone Doji", "Doji"],
+          explanation:
+            "Shooting Star suggests a bearish reversal after an uptrend. It has a small body and long upper shadow.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/uFcvvXK3S0WOHOmP1N44sg.png",
+          correct: "Harami",
+          options: ["Engulfing Bar", "Harami", "Doji", "Morning Star"],
+          explanation:
+            "The Harami pattern shows a small candle inside the prior large candle, signaling potential trend reversal.",
+        },
+        {
+          image:
+            "https://img001.prntscr.com/file/img001/hYT34DRRTJCekM20ZB_lkw.png",
+          correct: "Tweezers Tops and Bottoms",
+          options: [
+            "Harami",
+            "Doji",
+            "Tweezers Tops and Bottoms",
+            "Morning Star",
+          ],
+          explanation:
+            "Tweezer Tops and Bottoms indicate a potential market reversal, often at the peak or trough of a trend.",
+        },
+      ];
+
+      const quizContainer = document.getElementById("quiz");
+
+      quizData.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "quiz-item";
+        div.innerHTML = `
+        <img src="${item.image}" alt="Candlestick Pattern">
+        <div class="options">
+          ${item.options
+            .map(
+              (option) =>
+                `<button data-index="${index}" data-option="${option}">${option}</button>`
+            )
+            .join("")}
+        </div>
+        <div class="explanation" id="explanation-${index}">${
+          item.explanation
+        }</div>
+      `;
+        quizContainer.appendChild(div);
+      });
+
+      document.querySelectorAll(".options button").forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const index = e.target.getAttribute("data-index");
+          const selected = e.target.getAttribute("data-option");
+          const isCorrect = quizData[index].correct === selected;
+          const explanation = document.getElementById(`explanation-${index}`);
+
+          if (isCorrect) {
+            explanation.style.display = "block";
+            e.target.style.backgroundColor = "#c8e6c9";
+          } else {
+            e.target.style.backgroundColor = "#ffcdd2";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
